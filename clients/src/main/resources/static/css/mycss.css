@@ -1,0 +1,25 @@
+.mt-100{
+    margin-top: 100px;
+}
+
+.flag-icon{
+    height: 20px;
+    width: 35px;
+}
+
+.node-details-key{
+    font-size: 20px;
+    padding-left: 1em !important;
+    padding-right: 1em !important;
+}
+
+.node-details-value{
+    font-size: 18px;
+    color: gray;
+}
+
+.node-header{
+    background-color: olivedrab;
+    font-family: sans-serif;
+    color: white;
+}

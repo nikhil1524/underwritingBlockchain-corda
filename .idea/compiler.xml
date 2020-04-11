@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="underwriting-insurance-java.clients.main" target="1.8" />
+      <module name="underwriting-insurance-java.clients.test" target="1.8" />
+      <module name="underwriting-insurance-java.contracts.main" target="1.8" />
+      <module name="underwriting-insurance-java.contracts.test" target="1.8" />
+      <module name="underwriting-insurance-java.main" target="1.8" />
+      <module name="underwriting-insurance-java.test" target="1.8" />
+      <module name="underwriting-insurance-java.workflows.integrationTest" target="1.8" />
+      <module name="underwriting-insurance-java.workflows.main" target="1.8" />
+      <module name="underwriting-insurance-java.workflows.test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
