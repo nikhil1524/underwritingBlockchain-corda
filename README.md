@@ -1,16 +1,37 @@
-<p align="center">
-  <img src="https://www.corda.net/wp-content/uploads/2016/11/fg005_corda_b.png" alt="Corda" width="500">
-</p>
+  
+# Underwriting Blockchain 
 
-# CorDapp Template - Java
+Prerequisites - 
+* Language - Java (tested with jdk1.8.0_241.jdk)
+* Database - Postgres 12.2
+* Build Tool - Gradle (tested with gradle 6.3)
+* BlockChain Framework - Corda (version 4.3)
+* UI - (HTML 5, Jquery)
 
-Welcome to the Java CorDapp template. The CorDapp template is a stubbed-out CorDapp that you can use to bootstrap 
-your own CorDapps.
 
-**This is the Java version of the CorDapp template. The Kotlin equivalent is 
-[here](https://github.com/corda/cordapp-template-kotlin/).**
 
-# Pre-Requisites
+# Blockchain description( Abstract)
+
+Abstract:
+Blockchain based Underwriting engine for transparency and fraud detection using distributed ledger including multiple 
+external data. To reduce the risk liability.
+
+The main idea here is to have a greater transparency of underwriting data for a given entity which could be vehicle, 
+a person, a house and all entities for which the insurance can be provided using a blockchain based systems. 
+Where more parties can form a blockchain and share the data of underwriting to other trusted blockchain nodes.
+
+For the sake of POC we are restricting our project to the health insurance related underwriting
+
+In this project we have 4 nodes-
+1. Notary (Governing body as per the corda framework)
+2. Insurace company (Requester for the data for a given ssn)
+3. Health Organization( Data provider for the health related underwriting)
+4. Credit History Organization( Data provider for the credit history for the given ssn)
+
+
+Corda related prerequisites
+
+# Corda related Pre-Requisites
 
 See https://docs.corda.net/getting-set-up.html.
 
@@ -145,6 +166,8 @@ For a guided example of how to extend this template, see the Hello, World! tutor
 
 # Database
 
+You need to create 4 separate database for the for nodes
+
 create database underwriting_notary;
 create user notary with encrypted password 'password';
 grant all privileges on database underwriting_notary to notary;
@@ -162,3 +185,12 @@ grant all privileges on database underwriting_roff to roff;
 create database underwriting_nho;
 create user nho with encrypted password 'password';
 grant all privileges on database underwriting_nho to nho;
+
+
+# Node related config files to update the above created databases
+
+Node related config files can be found at config/dev/<node-folder>
+
+After you build the nodes please copy these configs from the above folder to the 
+individual node folder in the /build/nodes/<node-folder>
+
