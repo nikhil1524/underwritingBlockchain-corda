@@ -1,12 +1,17 @@
 package com.cordapp.underwriting.states;
 
-import com.cordapp.underwriting.contracts.TemplateContract;
 import com.cordapp.underwriting.contracts.UnderwritingRequestContract;
 import com.cordapp.underwriting.model.UnderwritingRequestType;
+import com.cordapp.underwriting.schema.underwritingRequest.PersistentUnderwritingRequestDetails;
+import com.cordapp.underwriting.schema.underwritingRequest.UnderwritingRequestSchemaV1;
+import com.google.common.collect.ImmutableList;
 import net.corda.core.contracts.BelongsToContract;
-import net.corda.core.contracts.ContractState;
 import net.corda.core.identity.AbstractParty;
 import net.corda.core.identity.Party;
+import net.corda.core.schemas.MappedSchema;
+import net.corda.core.schemas.PersistentState;
+import net.corda.core.schemas.QueryableState;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -17,7 +22,7 @@ import java.util.List;
 // *********
 
 @BelongsToContract(UnderwritingRequestContract.class)
-public class UnderwritingRequestState implements ContractState {
+public class UnderwritingRequestState implements QueryableState {
 
     private final long ssn;
     private final UnderwritingRequestType requestType;
@@ -60,6 +65,28 @@ public class UnderwritingRequestState implements ContractState {
     }
 
 
+    @NotNull
+    @Override
+    public PersistentState generateMappedObject(@NotNull MappedSchema schema) {
+        if(schema instanceof UnderwritingRequestSchemaV1){
+          return new PersistentUnderwritingRequestDetails(this.ssn, this.requestType.toString(),
+                  new java.sql.Date(new Date().getTime()),this.requester.getName().toString(),
+                  this.requestingTo.getName().toString());
+        } else{
+            throw new IllegalArgumentException("Unsupported Schema");
+        }
+    }
+
+    /**
+     * Returns a list of supported Schemas by this Queryable State.
+     *
+     * @return Iterable<MappedSchema>
+     */
+    @NotNull
+    @Override
+    public Iterable<MappedSchema> supportedSchemas() {
+        return ImmutableList.of(new UnderwritingRequestSchemaV1());
+    }
 }
 
 

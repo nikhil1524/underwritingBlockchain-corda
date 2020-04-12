@@ -1,5 +1,7 @@
 package com.cordapp.underwriting.states;
 
+import com.cordapp.underwriting.contracts.UnderwritingRequestContract;
+import net.corda.core.contracts.BelongsToContract;
 import net.corda.core.contracts.ContractState;
 import net.corda.core.identity.AbstractParty;
 import net.corda.core.identity.Party;
@@ -9,6 +11,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+@BelongsToContract(UnderwritingRequestContract.class)
 public class UnderwritingResponseNHOState implements ContractState {
 
     private final long ssn;

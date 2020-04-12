@@ -1,6 +1,7 @@
 package com.cordapp.underwriting;
 
 import com.cordapp.underwriting.flows.underwritingRequest.UnderwritingDataRequestInitiator;
+import com.cordapp.underwriting.flows.underwritingResponse.UnderwrintingResponse;
 import com.cordapp.underwriting.model.UnderwritingRequestType;
 import com.google.common.collect.ImmutableList;
 import net.corda.core.concurrent.CordaFuture;
@@ -14,22 +15,22 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class UnderwritingRequestFlowTest {
+public class UnderwritingResponseFlowTest {
 
-    private  final MockNetwork network = new MockNetwork(new MockNetworkParameters(ImmutableList.of(
+    private final MockNetwork network = new MockNetwork(new MockNetworkParameters(ImmutableList.of(
             TestCordapp.findCordapp("com.cordapp.underwriting.contracts"),
             TestCordapp.findCordapp("com.cordapp.underwriting.flows.underwritingRequest")
     )));
-    private  final StartedMockNode insuraceNode = network.createNode();
-    private  final StartedMockNode nhoNode = network.createNode();
+    private final StartedMockNode insuraceNode = network.createNode();
+    private final StartedMockNode nhoNode = network.createNode();
 
     @Before
-    public void setUp(){
+    public void setUp() {
         network.runNetwork();
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         network.stopNodes();
     }
 
@@ -43,10 +44,14 @@ public class UnderwritingRequestFlowTest {
         network.runNetwork();
         SignedTransaction ptx = future.get();
 
+
+        UnderwrintingResponse.UnderwritingResponseInitiator flow1 = new UnderwrintingResponse.UnderwritingResponseInitiator(insuraceNode.getInfo().getLegalIdentities().get(0), 1234, UnderwritingRequestType.REQUEST_TYPE_HEALTH);
+        CordaFuture<SignedTransaction> future1 = nhoNode.startFlow(flow1);
+
+        network.runNetwork();
+        SignedTransaction ptx1 = future1.get();
         //assertion for single output
-        Assert.assertEquals(1, ptx.getTx().getOutputStates().size());
-        System.out.println(ptx.getTx().getOutputStates());
+        Assert.assertEquals(1, ptx1.getTx().getOutputStates().size());
+        Assert.assertEquals(1 , ptx1.getTx().getInputs().size());
     }
-
 }
-

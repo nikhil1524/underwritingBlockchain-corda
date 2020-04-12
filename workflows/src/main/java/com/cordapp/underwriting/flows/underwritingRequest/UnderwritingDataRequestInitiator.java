@@ -17,6 +17,7 @@ import java.util.Date;
 
 // ******************
 // * Initiator flow *
+// flow from insurace to NHO
 // ******************
 
 

@@ -140,3 +140,25 @@ You should extend this template as follows:
 
 For a guided example of how to extend this template, see the Hello, World! tutorial 
 [here](https://docs.corda.net/hello-world-introduction.html).
+
+
+
+# Database
+
+create database underwriting_notary;
+create user notary with encrypted password 'password';
+grant all privileges on database underwriting_notary to notary;
+
+
+create database underwriting_insurance;
+create user insurance with encrypted password 'password';
+grant all privileges on database underwriting_insurance to insurance;
+
+
+create database underwriting_roff;
+create user roff with encrypted password 'password';
+grant all privileges on database underwriting_roff to roff;
+
+create database underwriting_nho;
+create user nho with encrypted password 'password';
+grant all privileges on database underwriting_nho to nho;

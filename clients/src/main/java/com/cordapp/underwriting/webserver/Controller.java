@@ -1,21 +1,24 @@
 package com.cordapp.underwriting.webserver;
 
+import com.cordapp.underwriting.flows.underwritingRequest.UnderwritingDataRequestInitiator;
+import com.cordapp.underwriting.model.UnderwritingRequestType;
+import net.corda.core.concurrent.CordaFuture;
+import net.corda.core.identity.CordaX500Name;
+import net.corda.core.identity.Party;
 import net.corda.core.messaging.CordaRPCOps;
 import net.corda.core.node.NodeInfo;
+import net.corda.core.transactions.SignedTransaction;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.json.JsonParser;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import java.io.IOException;
+import javax.xml.ws.Response;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Define your API endpoints here.
@@ -56,6 +59,24 @@ public class Controller {
             array.add(object);
         }
         return array.toJSONString();
+    }
+
+    @GetMapping(value = "/startRequest/{ssn}")
+    private ResponseEntity<String> getUnderwritingDetailsForSSN(@PathVariable("ssn") String ssn){
+        CordaX500Name insuraceCompanyName =CordaX500Name.parse("O=NorwayHealthOrganization,L=Oslo,C=NO");
+        Party NHONode = proxy.wellKnownPartyFromX500Name(insuraceCompanyName);
+        CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwritingDataRequestInitiator.class, NHONode, ssn, UnderwritingRequestType.REQUEST_TYPE_HEALTH).getReturnValue();
+
+        try {
+            SignedTransaction signedTransaction = future.get();
+
+            return ResponseEntity.ok().body("Started the transaction with id"+ signedTransaction.getId());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @GetMapping(value = "/templateendpoint", produces = "text/plain")
