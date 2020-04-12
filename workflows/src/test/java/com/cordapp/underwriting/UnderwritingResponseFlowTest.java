@@ -39,13 +39,13 @@ public class UnderwritingResponseFlowTest {
     @Test
     public void dummyTest() throws Exception {
 
-        UnderwritingDataRequestInitiator flow = new UnderwritingDataRequestInitiator(nhoNode.getInfo().getLegalIdentities().get(0), 1234, UnderwritingRequestType.REQUEST_TYPE_HEALTH);
+        UnderwritingDataRequestInitiator flow = new UnderwritingDataRequestInitiator(nhoNode.getInfo().getLegalIdentities().get(0), 1234, UnderwritingRequestType.REQUEST_TYPE_HEALTH.getAction());
         CordaFuture<SignedTransaction> future = insuraceNode.startFlow(flow);
         network.runNetwork();
         SignedTransaction ptx = future.get();
 
 
-        UnderwrintingResponse.UnderwritingResponseInitiator flow1 = new UnderwrintingResponse.UnderwritingResponseInitiator(insuraceNode.getInfo().getLegalIdentities().get(0), 1234, UnderwritingRequestType.REQUEST_TYPE_HEALTH);
+        UnderwrintingResponse.UnderwritingResponseInitiator flow1 = new UnderwrintingResponse.UnderwritingResponseInitiator( 1234);
         CordaFuture<SignedTransaction> future1 = nhoNode.startFlow(flow1);
 
         network.runNetwork();

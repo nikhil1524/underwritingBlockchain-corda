@@ -63,9 +63,12 @@ public class Controller {
 
     @GetMapping(value = "/startRequest/{ssn}")
     private ResponseEntity<String> getUnderwritingDetailsForSSN(@PathVariable("ssn") String ssn){
+        //O=InsuranceCompany,L=Bergen,C=NO"
         CordaX500Name insuraceCompanyName =CordaX500Name.parse("O=NorwayHealthOrganization,L=Oslo,C=NO");
         Party NHONode = proxy.wellKnownPartyFromX500Name(insuraceCompanyName);
-        CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwritingDataRequestInitiator.class, NHONode, ssn, UnderwritingRequestType.REQUEST_TYPE_HEALTH).getReturnValue();
+
+        CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwritingDataRequestInitiator.class, NHONode,
+                Long.valueOf(ssn).longValue(), UnderwritingRequestType.REQUEST_TYPE_HEALTH.getAction()).getReturnValue();
 
         try {
             SignedTransaction signedTransaction = future.get();

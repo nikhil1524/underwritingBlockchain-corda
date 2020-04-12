@@ -29,9 +29,9 @@ public class UnderwritingDataRequestInitiator extends FlowLogic<SignedTransactio
 
     private final Party requestingTo;
     private final long ssn;
-    private final UnderwritingRequestType requestType;
+    private final String requestType;
 
-    public UnderwritingDataRequestInitiator(Party requestingTo, long ssn, UnderwritingRequestType requestType) {
+    public UnderwritingDataRequestInitiator(Party requestingTo, long ssn, String requestType) {
         this.requestingTo = requestingTo;
         this.ssn = ssn;
         this.requestType = requestType;
@@ -51,7 +51,7 @@ public class UnderwritingDataRequestInitiator extends FlowLogic<SignedTransactio
         Party issuer = getOurIdentity();
 
         // We create out inputstate for this transaction
-        UnderwritingRequestState underwritingRequestState = new UnderwritingRequestState(ssn, requestType, new Date(), issuer, requestingTo);
+        UnderwritingRequestState underwritingRequestState = new UnderwritingRequestState(ssn, UnderwritingRequestType.valueOf(requestType) , new Date(), issuer, requestingTo);
         CommandData underwritingRequestCommand = new UnderwritingRequestContract.Commands.UnderwritingRequest();
 
         //Build our Transation

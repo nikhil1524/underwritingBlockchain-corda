@@ -178,9 +178,9 @@ create user insurance with encrypted password 'password';
 grant all privileges on database underwriting_insurance to insurance;
 
 
-create database underwriting_roff;
-create user roff with encrypted password 'password';
-grant all privileges on database underwriting_roff to roff;
+create database underwriting_credit;
+create user ncb with encrypted password 'password';
+grant all privileges on database underwriting_credit to ncb;
 
 create database underwriting_nho;
 create user nho with encrypted password 'password';

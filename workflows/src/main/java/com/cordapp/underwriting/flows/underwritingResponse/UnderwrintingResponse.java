@@ -25,14 +25,13 @@ public class UnderwrintingResponse {
 
         private final ProgressTracker progressTracker = new ProgressTracker();
 
-        private final Party respondingTo;
+        //private final Party respondingTo;
         private final long ssn;
-        private final UnderwritingRequestType requestType;
+        //private final String requestType;
 
-        public UnderwritingResponseInitiator(Party respondingTo, long ssn, UnderwritingRequestType requestType) {
-            this.respondingTo = respondingTo;
+        public UnderwritingResponseInitiator(long ssn) {
             this.ssn = ssn;
-            this.requestType = requestType;
+
         }
 
         @Suspendable
