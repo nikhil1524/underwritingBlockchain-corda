@@ -1,7 +1,9 @@
-package com.cordapp.underwriting.webserver;
+package com.cordapp.underwriting.norwayHealthOrganization.webserver;
 
 import com.cordapp.underwriting.flows.underwritingRequest.UnderwritingDataRequestInitiator;
+import com.cordapp.underwriting.flows.underwritingResponse.UnderwrintingResponse;
 import com.cordapp.underwriting.model.UnderwritingRequestType;
+import com.cordapp.underwriting.states.UnderwritingResponseNHOState;
 import net.corda.core.concurrent.CordaFuture;
 import net.corda.core.identity.CordaX500Name;
 import net.corda.core.identity.Party;
@@ -14,9 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.xml.ws.Response;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -61,22 +65,16 @@ public class Controller {
         return array.toJSONString();
     }
 
-    @GetMapping(value = "/startRequest/{ssn}")
-    private ResponseEntity<String> getUnderwritingDetailsForSSN(@PathVariable("ssn") String ssn){
-        //O=InsuranceCompany,L=Bergen,C=NO"
-        CordaX500Name insuraceCompanyName =CordaX500Name.parse("O=NorwayHealthOrganization,L=Oslo,C=NO");
-        Party NHONode = proxy.wellKnownPartyFromX500Name(insuraceCompanyName);
-
-        CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwritingDataRequestInitiator.class, NHONode,
-                Long.valueOf(ssn).longValue(), UnderwritingRequestType.REQUEST_TYPE_HEALTH.getAction()).getReturnValue();
-
-        try {
+    @GetMapping(value = "/sendHealthDetails/{ssn}")
+    private ResponseEntity<String> sendHealthDetailsForSSN(@PathVariable("ssn") String ssn){
+        CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwrintingResponse.UnderwritingResponseInitiator.class,
+                Long.valueOf(ssn).longValue()).getReturnValue();
+        try{
             SignedTransaction signedTransaction = future.get();
+            UnderwritingResponseNHOState state = (UnderwritingResponseNHOState) signedTransaction.getTx().getOutputStates().get(0);
 
-            return ResponseEntity.ok().body("Started the transaction with id"+ signedTransaction.getId());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+            return ResponseEntity.ok().body("Got the health Details for the user" +  state.getUnderwriterHealthDetails().toString());
+        } catch(InterruptedException | ExecutionException e){
             e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

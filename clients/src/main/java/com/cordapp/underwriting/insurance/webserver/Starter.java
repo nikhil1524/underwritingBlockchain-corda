@@ -1,4 +1,4 @@
-package com.cordapp.underwriting.webserver;
+package com.cordapp.underwriting.insurance.webserver;
 
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;

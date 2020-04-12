@@ -30,14 +30,27 @@ springBoot {
     mainClassName = "com.cordapp.underwriting.webserver.Server"
 }
 
-task runTemplateClient(type: JavaExec, dependsOn: assemble) {
+task runTemplateClientInsurance(type: JavaExec, dependsOn: assemble) {
     classpath = sourceSets.main.runtimeClasspath
-    main = 'com.cordapp.underwriting.Client'
-    args 'localhost:10055', 'user1', 'test'
+    main = 'com.cordapp.underwriting.insurance.Client'
+    args 'localhost:10006', 'user1', 'test'
 }
 
-task runTemplateServer(type: JavaExec, dependsOn: assemble) {
+task runTemplateServerInsurance(type: JavaExec, dependsOn: assemble) {
     classpath = sourceSets.main.runtimeClasspath
-    main = 'com.cordapp.underwriting.webserver.Starter'
-    args '--server.port=10055', '--config.rpc.host=localhost', '--config.rpc.port=10003', '--config.rpc.username=user1', '--config.rpc.password=test'
+    main = 'com.cordapp.underwriting.insurance.webserver.Starter'
+    args '--server.port=10055', '--config.rpc.host=localhost', '--config.rpc.port=10006', '--config.rpc.username=user1', '--config.rpc.password=test'
+}
+
+
+task runTemplateClientNHO(type: JavaExec, dependsOn: assemble) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.cordapp.underwriting.norwayHealthOrganization.Client'
+    args 'localhost:10009', 'user1', 'test'
+}
+
+task runTemplateServerNHO(type: JavaExec, dependsOn: assemble) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.cordapp.underwriting.norwayHealthOrganization.webserver.Starter'
+    args '--server.port=10060', '--config.rpc.host=localhost', '--config.rpc.port=10009', '--config.rpc.username=user1', '--config.rpc.password=test'
 }
