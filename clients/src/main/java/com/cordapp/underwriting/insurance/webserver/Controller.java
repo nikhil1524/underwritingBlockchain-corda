@@ -1,17 +1,13 @@
 package com.cordapp.underwriting.insurance.webserver;
 
-import com.cordapp.underwriting.flows.underwritingRequest.UnderwritingDataRequestInitiator;
-import com.cordapp.underwriting.flows.underwritingResponse.UnderwrintingResponse;
+import com.cordapp.underwriting.flows.underwritingRequest.UnderwritingDataRequestFlowInitiator;
+import com.cordapp.underwriting.flows.underwritingResponse.UnderwritingResponseFlow;
 import com.cordapp.underwriting.model.UnderwritingRequestType;
-import com.cordapp.underwriting.schema.underwritingRequest.PersistentUnderwritingRequestDetails;
-import com.cordapp.underwriting.states.UnderwriterHealthDetails;
-import com.cordapp.underwriting.states.UnderwritingResponseNHOState;
 import net.corda.core.concurrent.CordaFuture;
 import net.corda.core.identity.CordaX500Name;
 import net.corda.core.identity.Party;
 import net.corda.core.messaging.CordaRPCOps;
 import net.corda.core.node.NodeInfo;
-import net.corda.core.node.services.Vault;
 import net.corda.core.transactions.SignedTransaction;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -71,7 +67,7 @@ public class Controller {
         CordaX500Name insuraceCompanyName =CordaX500Name.parse("O=NorwayHealthOrganization,L=Oslo,C=NO");
         Party NHONode = proxy.wellKnownPartyFromX500Name(insuraceCompanyName);
 
-        CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwritingDataRequestInitiator.class, NHONode,
+        CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwritingDataRequestFlowInitiator.class, NHONode,
                 Long.valueOf(ssn).longValue(), UnderwritingRequestType.REQUEST_TYPE_HEALTH.getAction()).getReturnValue();
 
         try {
@@ -86,7 +82,7 @@ public class Controller {
 
     @GetMapping(value = "/sendHealthDetails/{ssn}")
     private ResponseEntity<String> sendHealthDetailsForSSN(@PathVariable("ssn") String ssn){
-        CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwrintingResponse.UnderwritingResponseInitiator.class,
+        CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwritingResponseFlow.UnderwritingResponseInitiator.class,
                 Long.valueOf(ssn).longValue()).getReturnValue();
         try{
             SignedTransaction signedTransaction = future.get();
@@ -97,13 +93,13 @@ public class Controller {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-    @GetMapping(value="/showRecievedUnderwritingDetails")
-    private ResponseEntity<String> showRecievedUnderwritingDetails(){
-
-        Vault.Page<UnderwritingResponseNHOState> a = proxy.vaultQuery(UnderwritingResponseNHOState.class);
-        return ResponseEntity.ok().build();
-    }
-
+//    @GetMapping(value="/showRecievedUnderwritingDetails")
+//    private ResponseEntity<String> showRecievedUnderwritingDetails(){
+//
+//        Vault.Page<UnderwritingResponseNHOState> a = proxy.vaultQuery(UnderwritingResponseNHOState.class);
+//        return ResponseEntity.ok().build();
+//    }
+//
 
 
     @GetMapping(value = "/templateendpoint", produces = "text/plain")

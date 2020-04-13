@@ -23,7 +23,7 @@ import java.util.Date;
 
 @InitiatingFlow
 @StartableByRPC
-public class UnderwritingDataRequestInitiator extends FlowLogic<SignedTransaction> {
+public class UnderwritingDataRequestFlowInitiator extends FlowLogic<SignedTransaction> {
 
     private final ProgressTracker progressTracker = new ProgressTracker();
 
@@ -31,7 +31,7 @@ public class UnderwritingDataRequestInitiator extends FlowLogic<SignedTransactio
     private final long ssn;
     private final String requestType;
 
-    public UnderwritingDataRequestInitiator(Party requestingTo, long ssn, String requestType) {
+    public UnderwritingDataRequestFlowInitiator(Party requestingTo, long ssn, String requestType) {
         this.requestingTo = requestingTo;
         this.ssn = ssn;
         this.requestType = requestType;

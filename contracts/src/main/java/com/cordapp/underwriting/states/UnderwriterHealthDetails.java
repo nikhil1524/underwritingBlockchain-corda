@@ -71,19 +71,4 @@ public class UnderwriterHealthDetails {
         return hasHeartProblems;
     }
 
-    @Override
-    public String toString() {
-        return "UnderwriterHealthDetails{" +
-                "ssn=" + ssn +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                ", gender='" + gender + '\'' +
-                ", bmi='" + bmi + '\'' +
-                ", height=" + height +
-                ", hasDiabatics=" + hasDiabatics +
-                ", hasBloodPressure=" + hasBloodPressure +
-                ", hasHeartProblems=" + hasHeartProblems +
-                '}';
-    }
 }

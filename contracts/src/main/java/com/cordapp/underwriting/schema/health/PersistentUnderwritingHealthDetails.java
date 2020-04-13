@@ -25,13 +25,14 @@ public class PersistentUnderwritingHealthDetails extends PersistentState impleme
     @Column private final Date dateOfBirth;
     @Column private final String gender;
     @Column private final String bmi;
-    @Column private final Float height;
+    @Column private final Double height;
     @Column private final Boolean hasDiabetics;
     @Column private final Boolean hasBloodPressure;
-    @Column private final Boolean isHasHeartProblems;
+    @Column private final Boolean hasHeartProblems;
 
 
-    public PersistentUnderwritingHealthDetails(Long ssn, String name, String surname, Date dateOfBirth, String gender, String bmi, Float height, Boolean hasDiabetics, Boolean hasBloodPressure, Boolean isHasHeartProblems) {
+    public PersistentUnderwritingHealthDetails(Long ssn, String name, String surname, Date dateOfBirth, String gender,
+                                               String bmi, Double height, Boolean hasDiabetics, Boolean hasBloodPressure, Boolean hasHeartProblems) {
       //  this.id = UUID.randomUUID();
         this.ssn = ssn;
         this.name = name;
@@ -42,7 +43,7 @@ public class PersistentUnderwritingHealthDetails extends PersistentState impleme
         this.height = height;
         this.hasDiabetics = hasDiabetics;
         this.hasBloodPressure = hasBloodPressure;
-        this.isHasHeartProblems = isHasHeartProblems;
+        this.hasHeartProblems = hasHeartProblems;
     }
 
     public PersistentUnderwritingHealthDetails(){
@@ -56,7 +57,7 @@ public class PersistentUnderwritingHealthDetails extends PersistentState impleme
         this.height = null;
         this.hasDiabetics = null;
         this.hasBloodPressure = null;
-        this.isHasHeartProblems = null;
+        this.hasHeartProblems = null;
     }
 
 //    public UUID getId() {
@@ -87,7 +88,7 @@ public class PersistentUnderwritingHealthDetails extends PersistentState impleme
         return bmi;
     }
 
-    public Float getHeight() {
+    public Double getHeight() {
         return height;
     }
 
@@ -100,6 +101,6 @@ public class PersistentUnderwritingHealthDetails extends PersistentState impleme
     }
 
     public Boolean getHasHeartProblems() {
-        return isHasHeartProblems;
+        return hasHeartProblems;
     }
 }

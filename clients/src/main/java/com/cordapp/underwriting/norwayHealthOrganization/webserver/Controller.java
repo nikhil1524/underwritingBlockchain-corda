@@ -1,12 +1,8 @@
 package com.cordapp.underwriting.norwayHealthOrganization.webserver;
 
-import com.cordapp.underwriting.flows.underwritingRequest.UnderwritingDataRequestInitiator;
-import com.cordapp.underwriting.flows.underwritingResponse.UnderwrintingResponse;
-import com.cordapp.underwriting.model.UnderwritingRequestType;
+import com.cordapp.underwriting.flows.underwritingResponse.UnderwritingResponseFlow;
 import com.cordapp.underwriting.states.UnderwritingResponseNHOState;
 import net.corda.core.concurrent.CordaFuture;
-import net.corda.core.identity.CordaX500Name;
-import net.corda.core.identity.Party;
 import net.corda.core.messaging.CordaRPCOps;
 import net.corda.core.node.NodeInfo;
 import net.corda.core.transactions.SignedTransaction;
@@ -67,7 +63,7 @@ public class Controller {
 
     @GetMapping(value = "/sendHealthDetails/{ssn}")
     private ResponseEntity<String> sendHealthDetailsForSSN(@PathVariable("ssn") String ssn){
-        CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwrintingResponse.UnderwritingResponseInitiator.class,
+        CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwritingResponseFlow.UnderwritingResponseInitiator.class,
                 Long.valueOf(ssn).longValue()).getReturnValue();
         try{
             SignedTransaction signedTransaction = future.get();

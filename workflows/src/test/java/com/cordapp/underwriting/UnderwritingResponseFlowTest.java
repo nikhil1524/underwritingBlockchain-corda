@@ -1,7 +1,7 @@
 package com.cordapp.underwriting;
 
-import com.cordapp.underwriting.flows.underwritingRequest.UnderwritingDataRequestInitiator;
-import com.cordapp.underwriting.flows.underwritingResponse.UnderwrintingResponse;
+import com.cordapp.underwriting.flows.underwritingRequest.UnderwritingDataRequestFlowInitiator;
+import com.cordapp.underwriting.flows.underwritingResponse.UnderwritingResponseFlow;
 import com.cordapp.underwriting.model.UnderwritingRequestType;
 import com.google.common.collect.ImmutableList;
 import net.corda.core.concurrent.CordaFuture;
@@ -39,13 +39,13 @@ public class UnderwritingResponseFlowTest {
     @Test
     public void dummyTest() throws Exception {
 
-        UnderwritingDataRequestInitiator flow = new UnderwritingDataRequestInitiator(nhoNode.getInfo().getLegalIdentities().get(0), 1234, UnderwritingRequestType.REQUEST_TYPE_HEALTH.getAction());
+        UnderwritingDataRequestFlowInitiator flow = new UnderwritingDataRequestFlowInitiator(nhoNode.getInfo().getLegalIdentities().get(0), 1234, UnderwritingRequestType.REQUEST_TYPE_HEALTH.getAction());
         CordaFuture<SignedTransaction> future = insuraceNode.startFlow(flow);
         network.runNetwork();
         SignedTransaction ptx = future.get();
 
 
-        UnderwrintingResponse.UnderwritingResponseInitiator flow1 = new UnderwrintingResponse.UnderwritingResponseInitiator( 1234);
+        UnderwritingResponseFlow.UnderwritingResponseInitiator flow1 = new UnderwritingResponseFlow.UnderwritingResponseInitiator( 1234);
         CordaFuture<SignedTransaction> future1 = nhoNode.startFlow(flow1);
 
         network.runNetwork();
