@@ -24,11 +24,11 @@ public class UnderwritingRequestContract implements Contract {
         if (command.getValue() instanceof Commands.UnderwritingRequest) {
             // Issuance verification logic.
             requireThat(req -> {
-                req.using("Transaction must have input states.", !inputs.isEmpty());
+                req.using("Transaction must have input states.", inputs.isEmpty());
                 return null;
             });
             requireThat( req-> {
-                req.using("Transaction should not have output states", outputs.isEmpty());
+                req.using("Transaction should not have output states", !outputs.isEmpty());
                 return null;
             });
         } else if (command.getValue() instanceof Commands.UnderwritingResponse) {

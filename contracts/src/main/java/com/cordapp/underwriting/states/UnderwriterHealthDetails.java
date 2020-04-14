@@ -2,25 +2,27 @@ package com.cordapp.underwriting.states;
 
 import net.corda.core.serialization.CordaSerializable;
 
+import java.util.Date;
+
 @CordaSerializable
 public class UnderwriterHealthDetails {
 
     private final long ssn;
     private final String name;
     private final String surname;
-    private final int age;
+    private final Date dateOfBirth;
     private final String gender;
     private final String bmi;
-    private final float height;
+    private final double height;
     private final boolean hasDiabatics;
     private final boolean hasBloodPressure;
     private final boolean hasHeartProblems;
 
-    public UnderwriterHealthDetails(long ssn, String name, String surname, int age, String gender, String bmi, float height, boolean hasDiabatics, boolean hasBloodPressure, boolean hasHeartProblems) {
+    public UnderwriterHealthDetails(long ssn, String name, String surname, Date dateOfBirth, String gender, String bmi, double height, boolean hasDiabatics, boolean hasBloodPressure, boolean hasHeartProblems) {
         this.ssn = ssn;
         this.name = name;
         this.surname = surname;
-        this.age = age;
+        this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.bmi = bmi;
         this.height = height;
@@ -41,8 +43,8 @@ public class UnderwriterHealthDetails {
         return surname;
     }
 
-    public int getAge() {
-        return age;
+    public Date getDateOfBirth() {
+        return dateOfBirth;
     }
 
     public String getGender() {
@@ -53,7 +55,7 @@ public class UnderwriterHealthDetails {
         return bmi;
     }
 
-    public float getHeight() {
+    public double getHeight() {
         return height;
     }
 
@@ -67,5 +69,21 @@ public class UnderwriterHealthDetails {
 
     public boolean isHasHeartProblems() {
         return hasHeartProblems;
+    }
+
+    @Override
+    public String toString() {
+        return "UnderwriterHealthDetails{" +
+                "ssn=" + ssn +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", gender='" + gender + '\'' +
+                ", bmi='" + bmi + '\'' +
+                ", height=" + height +
+                ", hasDiabatics=" + hasDiabatics +
+                ", hasBloodPressure=" + hasBloodPressure +
+                ", hasHeartProblems=" + hasHeartProblems +
+                '}';
     }
 }

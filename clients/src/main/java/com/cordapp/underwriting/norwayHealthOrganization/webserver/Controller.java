@@ -1,21 +1,24 @@
-package com.cordapp.underwriting.webserver;
+package com.cordapp.underwriting.norwayHealthOrganization.webserver;
 
+import com.cordapp.underwriting.flows.underwritingResponse.UnderwritingResponseFlow;
+import com.cordapp.underwriting.states.UnderwritingResponseNHOState;
+import net.corda.core.concurrent.CordaFuture;
 import net.corda.core.messaging.CordaRPCOps;
 import net.corda.core.node.NodeInfo;
+import net.corda.core.transactions.SignedTransaction;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.json.JsonParser;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Define your API endpoints here.
@@ -56,6 +59,21 @@ public class Controller {
             array.add(object);
         }
         return array.toJSONString();
+    }
+
+    @GetMapping(value = "/sendHealthDetails/{ssn}")
+    private ResponseEntity<String> sendHealthDetailsForSSN(@PathVariable("ssn") String ssn){
+        CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwritingResponseFlow.UnderwritingResponseInitiator.class,
+                Long.valueOf(ssn).longValue()).getReturnValue();
+        try{
+            SignedTransaction signedTransaction = future.get();
+            UnderwritingResponseNHOState state = (UnderwritingResponseNHOState) signedTransaction.getTx().getOutputStates().get(0);
+
+            return ResponseEntity.ok().body("Sent the health Details for the user" +  ssn + " " + state.getUnderwriterHealthDetails().toString());
+        } catch(InterruptedException | ExecutionException e){
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @GetMapping(value = "/templateendpoint", produces = "text/plain")
