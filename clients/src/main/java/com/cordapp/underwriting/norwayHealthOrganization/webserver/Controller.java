@@ -69,7 +69,7 @@ public class Controller {
             SignedTransaction signedTransaction = future.get();
             UnderwritingResponseNHOState state = (UnderwritingResponseNHOState) signedTransaction.getTx().getOutputStates().get(0);
 
-            return ResponseEntity.ok().body("Got the health Details for the user" +  state.getUnderwriterHealthDetails().toString());
+            return ResponseEntity.ok().body("Sent the health Details for the user" +  ssn + " " + state.getUnderwriterHealthDetails().toString());
         } catch(InterruptedException | ExecutionException e){
             e.printStackTrace();
         }

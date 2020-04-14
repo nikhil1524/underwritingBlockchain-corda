@@ -9,6 +9,7 @@ $(document).ready(function() {
         $.ajax({
             url: url,
           success: function( data ) {
+                $('#errormessage').html('');
                 $("#success-block").html('Submitted Successfully and generated TransactionId'+ data)
             },
             error: function (jqXHR, exception) {
@@ -30,6 +31,7 @@ $(document).ready(function() {
                 }
                 console.log(exception);
                 $('#errormessage').html(msg);
+                $("#success-block").html('');
             }
         });
     });

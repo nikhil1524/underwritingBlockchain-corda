@@ -2,6 +2,7 @@ package com.cordapp.underwriting.flows.underwritingResponse;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.cordapp.underwriting.contracts.UnderwritingRequestContract;
+import com.cordapp.underwriting.flows.util.UnderwritingRandomHealthDetailsProvider;
 import com.cordapp.underwriting.states.UnderwriterHealthDetails;
 import com.cordapp.underwriting.states.UnderwritingRequestState;
 import com.cordapp.underwriting.states.UnderwritingResponseNHOState;
@@ -57,9 +58,7 @@ public class UnderwritingResponseFlow {
 
             Party respondingTo = underwritingRequestState.getRequester();
 
-            UnderwriterHealthDetails underwriterHealthDetails = new UnderwriterHealthDetails(ssn,
-                    "test", "surname", new Date(), "male", "123", 7.0,
-                    false, false, true);
+            UnderwriterHealthDetails underwriterHealthDetails = UnderwritingRandomHealthDetailsProvider.getRandomHealthDetails(ssn);
 
             UnderwritingResponseNHOState underwritingResponseNHOState = new UnderwritingResponseNHOState(ssn,underwriterHealthDetails,new Date(),
                     responder, respondingTo);

@@ -9,7 +9,8 @@ $(document).ready(function() {
         $.ajax({
             url: url,
             success: function( data ) {
-                $("#success-block").html('Responded  to the insurance company TransactionId'+ data)
+                $('#errormessage').html('');
+                $("#success-block").html(data)
             },
             error: function (jqXHR, exception) {
                 var msg = '';
@@ -18,7 +19,7 @@ $(document).ready(function() {
                 } else if (jqXHR.status == 404) {
                     msg = 'Requested page not found. [404]';
                 } else if (jqXHR.status == 500) {
-                    msg = 'Internal Server Error [500].';
+                    msg = 'ssn not requested.';
                 } else if (exception === 'parsererror') {
                     msg = 'Requested JSON parse failed.';
                 } else if (exception === 'timeout') {
@@ -29,6 +30,7 @@ $(document).ready(function() {
                     msg = 'Uncaught Error.\n' + jqXHR.responseText;
                 }
                 console.log(exception);
+                $("#success-block").html('');
                 $('#errormessage').html(msg);
             }
         });
