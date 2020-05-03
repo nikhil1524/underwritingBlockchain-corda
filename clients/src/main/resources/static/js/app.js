@@ -44,8 +44,6 @@ $(document).ready(function() {
     function getNodesBlock(data){
         var code ='';
         var row = 0;
-        console.log('row' +row + '4 '+ row%4);
-        console.log('row' +row + '3 '+ row%3);
 
         $.each(data,function(index, data) {
             console.log(data);
@@ -96,6 +94,5 @@ $(document).ready(function() {
         });
         return code;
     }
-
 })
 

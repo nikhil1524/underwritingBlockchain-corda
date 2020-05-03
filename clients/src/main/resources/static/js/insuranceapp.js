@@ -4,7 +4,7 @@ $(document).ready(function() {
 
     $("#btn-submit").click( function(){
         var ssn = $("#input-ssn").val();
-        var url = 'http://localhost:10055/startRequest/' +ssn;
+        var url = 'http://localhost:10055/requestHealthDetails/' +ssn;
 
         $.ajax({
             url: url,

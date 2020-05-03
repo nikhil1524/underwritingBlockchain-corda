@@ -1,11 +1,16 @@
 package com.cordapp.underwriting.norwayHealthOrganization.webserver;
 
+import com.cordapp.underwriting.contracts.UnderwritingRequestContract;
 import com.cordapp.underwriting.flows.underwritingResponse.UnderwritingResponseFlow;
+import com.cordapp.underwriting.states.UnderwritingRequestState;
 import com.cordapp.underwriting.states.UnderwritingResponseNHOState;
 import net.corda.core.concurrent.CordaFuture;
 import net.corda.core.messaging.CordaRPCOps;
 import net.corda.core.node.NodeInfo;
+import net.corda.core.node.services.vault.IQueryCriteriaParser;
+import net.corda.core.node.services.vault.QueryCriteria;
 import net.corda.core.transactions.SignedTransaction;
+import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -17,6 +22,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -74,6 +83,22 @@ public class Controller {
             e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @GetMapping(value = "/getOpenHealthDetailsRequests")
+    private ResponseEntity<String> getOpenHealthDetailsRequest(){
+        JSONArray array = new JSONArray();
+        proxy.vaultQuery(UnderwritingRequestState.class).getStates().stream().forEach(state ->{
+            UnderwritingRequestState uwrState = state.getState().getData();
+            JSONObject object = new JSONObject();
+            object.put("ssn", Long.valueOf(uwrState.getSsn()).toString());
+            object.put("date", uwrState.getDate().toString());
+            object.put("requester", uwrState.getRequester().getName().toString());
+            object.put("requestingTo", uwrState.getRequestingTo().getName().toString());
+            object.put("status", uwrState.getStatus().toString());
+            array.add(object);
+        });
+        return ResponseEntity.ok().body(array.toJSONString());
     }
 
     @GetMapping(value = "/templateendpoint", produces = "text/plain")

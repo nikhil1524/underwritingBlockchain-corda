@@ -30,26 +30,44 @@
     </div>
 </nav>
 
-
+<div class="container container-fluid">
+    <div class="mt-100">
+        <div class="row">
+            <h4> Send the Health related data to Insurance Company</h4><br>
+        </div>
+            <i class="fa fa-refresh btn" id="btn-getPendingRequests" style="font-size:20px;color: grey;"></i>
+        <div class="row  mt-5 w-90">
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">SSN</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Requester</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Send Data</th>
+                </tr>
+                </thead>
+                <tbody id="data-pending-requests">
+                </tbody>
+            </table>
+        </div>
+</div>
 
 <div class="container container-fluid">
     <div class="mt-100">
-
         <div class="row">
             <h2> Send the Health related data to Insurance Company</h2><br>
         </div>
-
         <div class="row  mt-5">
                 <form>
-                <div class="form-group">
-                    <input id="input-ssn"type="number" class="form-control" id="exampleInputEmail1" placeholder="Enter SSN">
-                    <small id="emailHelp" class="form-text text-muted">We are giving back the health related information to Insurance Node for this ssn</small>
-                </div>
-
-                <button type="button" class="btn btn-primary" id="btn-submit">Submit</button>
+                    <div class="form-group">
+                        <input id="input-ssn"type="number" class="form-control" id="exampleInputEmail1" placeholder="Enter SSN">
+                        <small id="emailHelp" class="form-text text-muted">We are giving back the health related information to Insurance Node for this ssn</small>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="btn-submit">Submit</button>
                 </form>
         </div>
-
         </div>
         <div id="success-block" class="success-block">
         </div>

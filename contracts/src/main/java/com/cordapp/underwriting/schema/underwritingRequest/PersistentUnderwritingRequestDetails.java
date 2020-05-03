@@ -20,14 +20,16 @@ public class PersistentUnderwritingRequestDetails extends PersistentState implem
     @Column private final Date date;
     @Column private final String requester;
     @Column private final String requestingTo;
+    @Column private final Character status;
 
-    public PersistentUnderwritingRequestDetails(long ssn, String requestType, Date date, String requester, String requestingTo) {
+    public PersistentUnderwritingRequestDetails(long ssn, String requestType, Date date, String requester, String requestingTo, Character status) {
        // this.id = UUID.randomUUID();
         this.ssn = ssn;
         this.requestType = requestType;
         this.date = date;
         this.requester = requester;
         this.requestingTo = requestingTo;
+        this.status = status;
     }
 
     public PersistentUnderwritingRequestDetails(){
@@ -37,6 +39,7 @@ public class PersistentUnderwritingRequestDetails extends PersistentState implem
         this.date = null;
         this.requester = null;
         this.requestingTo = null;
+        this.status = null;
     }
 
 //   public UUID getId() {
@@ -62,4 +65,6 @@ public class PersistentUnderwritingRequestDetails extends PersistentState implem
     public String getRequestingTo() {
         return requestingTo;
     }
+
+    public Character getStatus(){ return status; }
 }

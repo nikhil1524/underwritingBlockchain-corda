@@ -30,13 +30,15 @@ public class UnderwritingRequestState implements QueryableState {
 
     private final Party requester;
     private final Party requestingTo;
+    private final Character status;
 
-    public UnderwritingRequestState(long ssn, UnderwritingRequestType requestType, Date date, Party requester, Party requestingTo) {
+    public UnderwritingRequestState(long ssn, UnderwritingRequestType requestType, Date date, Party requester, Party requestingTo,Character status) {
         this.ssn = ssn;
         this.requestType = requestType;
         this.date = date;
         this.requester = requester;
         this.requestingTo = requestingTo;
+        this.status = status;
     }
 
     public long getSsn() {
@@ -59,11 +61,12 @@ public class UnderwritingRequestState implements QueryableState {
         return requestingTo;
     }
 
+    public Character getStatus() { return status; }
+
     @Override
     public List<AbstractParty> getParticipants(){
         return Arrays.asList(requester, requestingTo);
     }
-
 
     @NotNull
     @Override
@@ -71,7 +74,7 @@ public class UnderwritingRequestState implements QueryableState {
         if(schema instanceof UnderwritingRequestSchemaV1){
           return new PersistentUnderwritingRequestDetails(this.ssn, this.requestType.toString(),
                   new java.sql.Date(new Date().getTime()),this.requester.getName().toString(),
-                  this.requestingTo.getName().toString());
+                  this.requestingTo.getName().toString(), this.status);
         } else{
             throw new IllegalArgumentException("Unsupported Schema");
         }

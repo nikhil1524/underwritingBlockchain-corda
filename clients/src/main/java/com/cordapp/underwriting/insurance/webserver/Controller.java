@@ -61,7 +61,7 @@ public class Controller {
         return array.toJSONString();
     }
 
-    @GetMapping(value = "/startRequest/{ssn}")
+    @GetMapping(value = "/requestHealthDetails/{ssn}")
     private ResponseEntity<String> getUnderwritingDetailsForSSN(@PathVariable("ssn") String ssn){
         //O=InsuranceCompany,L=Bergen,C=NO"
         CordaX500Name insuraceCompanyName =CordaX500Name.parse("O=NorwayHealthOrganization,L=Oslo,C=NO");
@@ -69,10 +69,8 @@ public class Controller {
 
         CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwritingDataRequestFlowInitiator.class, NHONode,
                 Long.valueOf(ssn).longValue(), UnderwritingRequestType.REQUEST_TYPE_HEALTH.getAction()).getReturnValue();
-
         try {
             SignedTransaction signedTransaction = future.get();
-
             return ResponseEntity.ok().body("Started the transaction with id"+ signedTransaction.getId());
         } catch (InterruptedException |ExecutionException e) {
             e.printStackTrace();
@@ -80,18 +78,18 @@ public class Controller {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-    @GetMapping(value = "/sendHealthDetails/{ssn}")
-    private ResponseEntity<String> sendHealthDetailsForSSN(@PathVariable("ssn") String ssn){
-        CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwritingResponseFlow.UnderwritingResponseInitiator.class,
-                Long.valueOf(ssn).longValue()).getReturnValue();
-        try{
-            SignedTransaction signedTransaction = future.get();
-            return ResponseEntity.ok().body("Got the health Details for the user" + signedTransaction.getId());
-        } catch(InterruptedException | ExecutionException e){
-            e.printStackTrace();
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
+//    @GetMapping(value = "/sendHealthDetails/{ssn}")
+//    private ResponseEntity<String> sendHealthDetailsForSSN(@PathVariable("ssn") String ssn){
+//        CordaFuture<SignedTransaction> future = proxy.startFlowDynamic(UnderwritingResponseFlow.UnderwritingResponseInitiator.class,
+//                Long.valueOf(ssn).longValue()).getReturnValue();
+//        try{
+//            SignedTransaction signedTransaction = future.get();
+//            return ResponseEntity.ok().body("Got the health Details for the user" + signedTransaction.getId());
+//        } catch(InterruptedException | ExecutionException e){
+//            e.printStackTrace();
+//        }
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//    }
 
 //    @GetMapping(value="/showRecievedUnderwritingDetails")
 //    private ResponseEntity<String> showRecievedUnderwritingDetails(){
