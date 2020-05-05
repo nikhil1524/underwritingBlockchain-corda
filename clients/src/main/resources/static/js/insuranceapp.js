@@ -10,7 +10,7 @@ $(document).ready(function() {
             url: url,
           success: function( data ) {
                 $('#errormessage').html('');
-                $("#success-block").html('Submitted Successfully and generated TransactionId'+ data)
+                $("#success-block").html(data);
             },
             error: function (jqXHR, exception) {
                 var msg = '';
@@ -35,5 +35,46 @@ $(document).ready(function() {
             }
         });
     });
+
+    $("#btn-getIncommingRequests").click(function () {
+            var url = 'http://localhost:10055/fetchRespondedHealthDetails'
+            $.ajax({
+                url: url,
+                success: function (data) {
+                    console.log(data);
+                    console.log(JSON.parse(data).length);
+                    if (JSON.parse(data).length > 0) {
+                        $("#data-incomming-requests").html(
+                            getHTMLRows(data));
+                    } else{
+                        $("#data-incomming-requests").html(
+                            "<h5> <span class=\"text-center\">No Response Recieved</span></h5>");
+                    }
+                },
+                error: function (jqXHR, exception) {
+                    console.log(exception);
+                }
+            })
+        }
+    );
+
+    function getHTMLRows(datas) {
+        var htmlCode = '';
+        $.each(JSON.parse(datas), function (index, data) {
+            htmlCode += '   <tr>\n' +
+                '                    <th scope="row">' + (index+1) + '</th>\n' +
+                '                    <td>' + data.ssn + '</td>\n' +
+                '                    <td>' + data.date + '</td>\n' +
+                '                    <td>' + data.responder + '</td>\n' +
+                '                    <td>' + data.name +' ' +data.surname + '</td>\n' +
+                '                    <td>' + data.dob + '</td>\n' +
+                '                    <td>' + data.bmi + '</td>\n' +
+                '                    <td>' + data.diabatics + '</td>\n' +
+                '                    <td>' + data.bp + '</td>\n' +
+                '                    <td>' + data.heartProblen + '</td>\n' +
+                '                </tr>';
+        });
+        return htmlCode;
+    }
 })
 

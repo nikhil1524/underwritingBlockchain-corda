@@ -1,6 +1,7 @@
 "use strict";
 
 $(document).ready(function () {
+
     $("#btn-submit").click(function () {
         var ssn = $("#input-ssn").val();
         var url = 'http://localhost:10060/sendHealthDetails/' + ssn;
@@ -35,26 +36,24 @@ $(document).ready(function () {
         });
     });
 
-    $("#myButtonId").click(function () {
-        console.log('hello');
-    });
-
-
-    $("#id-btn1").click( function (){
-        console.log('clicked');
-        /*  var urlSendHealthDetails = 'http://localhost:10060/sendHealthDetails/' + ssn;
-          var id = '#id-btn-' + ssn;
-          console.log('sending data');
-          $.ajax({
-              url: urlSendHealthDetails,
-              success: function (data) {
-                  $(id).addClass("disabled");
-              },
-              error: function (jqXHR, exception) {
-                  console.log(exception);
-              }
-          });*/
-
+    $("#data-pending-requests").on('click' , '[id^=id-btn-]',function () {
+        $(this).removeClass('fa-angle-right border')
+        $(this).addClass(' fa-cog fa-spin ');
+        var id = '' + $(this).attr('id');
+        var ssn = id.substr(7, id.length);
+        var element = $(this);
+        var urlSendHealthDetails = 'http://localhost:10060/sendHealthDetails/' + ssn;
+           console.log('sending data');
+           $.ajax({
+               url: urlSendHealthDetails,
+               success: function (data) {
+                 element.addClass('disabled fa-thumbs-up fa-flip-*');
+                 element.removeClass('fas fa-cog fa-spin');
+               },
+               error: function (jqXHR, exception) {
+                   console.log(exception);
+               }
+           });
     });
 
     $("#btn-getPendingRequests").click(function () {
@@ -63,9 +62,14 @@ $(document).ready(function () {
                 url: url,
                 success: function (data) {
                     console.log(data);
-                    $("#data-pending-requests").html(
-                        getHTMLRows(data));
-                        },
+                    if (JSON.parse(data).length > 0) {
+                        $("#data-pending-requests").html(
+                            getHTMLRows(data));
+                    } else{
+                        $("#data-pending-requests").html(
+                            "<h5> <span class=\"text-center\">No Pending Records</span></h5>");
+                    }
+                },
                 error: function (jqXHR, exception) {
                     console.log(exception);
                 }
@@ -76,8 +80,9 @@ $(document).ready(function () {
     function getHTMLRows(datas) {
         var htmlCode = '';
         $.each(JSON.parse(datas), function (index, data) {
-            var id='id-btn';
-            var buttonCode = '<button class="btn btn-small btn-success" id="myButtonId">send</button>';
+            var id='id-btn-'+data.ssn;
+            //var buttonCode = '<button class="btn btn-small btn-success" id="myButtonId">send</button>';
+            var buttonCode = '<i class="fa fa-angle-right btn border" id="'+ id +'" style="font-size:20px;color: #2fcc59;"></i>'
 
             htmlCode += '   <tr>\n' +
                 '                    <th scope="row">' + (index+1) + '</th>\n' +

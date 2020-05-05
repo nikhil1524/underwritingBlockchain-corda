@@ -3,6 +3,8 @@ package com.cordapp.underwriting.insurance.webserver;
 import com.cordapp.underwriting.flows.underwritingRequest.UnderwritingDataRequestFlowInitiator;
 import com.cordapp.underwriting.flows.underwritingResponse.UnderwritingResponseFlow;
 import com.cordapp.underwriting.model.UnderwritingRequestType;
+import com.cordapp.underwriting.states.UnderwritingRequestState;
+import com.cordapp.underwriting.states.UnderwritingResponseNHOState;
 import net.corda.core.concurrent.CordaFuture;
 import net.corda.core.identity.CordaX500Name;
 import net.corda.core.identity.Party;
@@ -76,6 +78,28 @@ public class Controller {
             e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @GetMapping(value="/fetchRespondedHealthDetails")
+    private ResponseEntity<String> getRespondedHealthDetails(){
+        JSONArray array = new JSONArray();
+        proxy.vaultQuery(UnderwritingResponseNHOState.class).getStates().stream().forEach(state ->{
+            UnderwritingResponseNHOState uwrState = state.getState().getData();
+            JSONObject object = new JSONObject();
+            object.put("ssn", Long.valueOf(uwrState.getSsn()).toString());
+            object.put("date", uwrState.getTimeStamp().toString());
+            object.put("responder", uwrState.getResponder().getName().toString());
+            object.put("respondingTo", uwrState.getRespondingTo().getName().toString());
+            object.put("name", uwrState.getUnderwriterHealthDetails().getName());
+            object.put("surname", uwrState.getUnderwriterHealthDetails().getSurname());
+            object.put("dob", uwrState.getUnderwriterHealthDetails().getDateOfBirth().toString());
+            object.put("bmi", uwrState.getUnderwriterHealthDetails().getBmi());
+            object.put("bp", uwrState.getUnderwriterHealthDetails().isHasBloodPressure());
+            object.put("diabatics", uwrState.getUnderwriterHealthDetails().isHasDiabatics());
+            object.put("heartProblen", uwrState.getUnderwriterHealthDetails().isHasHeartProblems());
+            array.add(object);
+        });
+        return ResponseEntity.ok().body(array.toJSONString());
     }
 
 //    @GetMapping(value = "/sendHealthDetails/{ssn}")
